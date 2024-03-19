@@ -1,9 +1,12 @@
 
-// ---- import
+// react
+import React from 'react'
+import ReactDOM from 'react-dom/client'
 
-import React from "react";
-import ReactDOM from "react-dom/client";
+// style
+import './styles/reset.css'
 
+// App
 import App from './components/App/App'
 
 

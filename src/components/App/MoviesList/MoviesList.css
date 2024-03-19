@@ -1,0 +1,5 @@
+
+.moviesList{
+    flex-wrap: wrap;
+    padding: 0 40px;
+}
