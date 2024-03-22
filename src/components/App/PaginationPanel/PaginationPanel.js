@@ -3,10 +3,10 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 
 // libs
-// import {takeMeName} from 'takeMeName'
+import {Pagination} from 'antd'
 
 // style
-// import './takeMeName.css'
+import './PaginationPanel.css'
 
 // store
 // import {takeMeName} from '../../stores/takeMeName'
@@ -41,13 +41,11 @@ export default class PagesPanel extends React.Component {
 
     render() {
         return (
-            <div
-                style={{
-                    backgroundColor:'tomato',
-                    width:'40px',
-                    height:'40px',
-                }}
-            ></div>
+            <Pagination
+                defaultCurrent={1}
+                defaultPageSize={5}
+                total={20}
+            />
         )
     }
 }

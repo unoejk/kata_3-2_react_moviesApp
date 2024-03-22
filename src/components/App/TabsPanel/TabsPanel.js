@@ -3,10 +3,10 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 
 // libs
-// import {takeMeName} from 'takeMeName'
+import {Tabs} from 'antd'
 
 // style
-// import './takeMeName.css'
+import './TabsPanel.css'
 
 // store
 // import {takeMeName} from '../../stores/takeMeName'
@@ -39,15 +39,20 @@ export default class TabsPanel extends React.Component {
     //     })
     // }
 
+    onChange(){
+        console.log('onChange')
+    }
+
     render() {
         return (
-            <div
-                style={{
-                    backgroundColor:'tomato',
-                    width:'40px',
-                    height:'40px',
-                }}
-            ></div>
+            <Tabs
+                items={[
+                    {key:'Search',label:'Search'},
+                    {key:'Rated',label:'Rated'}
+                ]}
+                defaultActiveKey={'Search'}
+                onChange={this.onChange}
+            />
         )
     }
 }

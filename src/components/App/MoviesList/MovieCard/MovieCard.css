@@ -1,13 +1,31 @@
 
+/*removeLines*/
 .ant-card{
     border-radius: 0;
 }
-.ant-card>.ant-card-head,
-.ant-card>.ant-card-body,
-.ant-card>.ant-card-actions{
+.ant-card .ant-card-head,
+.ant-card .ant-card-actions{
     border: none;
 }
 
+/*removeLength*/
+.ant-card .ant-card-body{
+    padding-top: 0;
+}
+/*.ant-card .ant-card-head,*/
+/*.ant-card .ant-card-body,*/
+/*.ant-card .ant-card-actions*/
+/*{*/
+/*    padding: 0;*/
+/*}*/
+/*.ant-card .ant-card-head{*/
+/*    min-height: 0;*/
+/*}*/
+/*.ant-card .ant-card-actions>li{*/
+/*    margin: 0;*/
+/*}*/
+
+/*setPosition*/
 .ant-card{
     border-radius: 0;
     display: flex;
@@ -16,12 +34,16 @@
 }
 .ant-card-body{
     flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 .ant-card-head,
 .ant-card-actions{
     flex-shrink: 0;
 }
 
+/*setLength*/
 .movieCard{
     width: 450px;
     height: 280px;
@@ -38,5 +60,11 @@
 }
 .movieCard__article{
     flex-grow: 1;
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*gap: 20px;*/
 }
+.movieCard__time{}
 .movieCard__description{}
+
+

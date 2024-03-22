@@ -7,7 +7,7 @@ import { Tag } from 'antd'
 import {Flex} from 'antd'
 
 // style
-// import './takeMeName.css'
+import './TagsList.css'
 
 // store
 // import {takeMeName} from '../../stores/takeMeName'
@@ -18,7 +18,7 @@ import {Flex} from 'antd'
 
 // ---- go-go
 
-export default class Card extends React.Component {
+export default class TagsList extends React.Component {
     // static defaultProps={
     //     takeMeName:'',
     // }
@@ -45,6 +45,7 @@ export default class Card extends React.Component {
             <Tag
                 key={val}
                 component={'li'}
+                className={'tagsList__tag'}
             >
                 {val}
             </Tag>
@@ -54,6 +55,7 @@ export default class Card extends React.Component {
     render() {return(
         <Flex
             component={'ul'}
+            className={'tagsList'}
         >
             {this.tagsElems}
         </Flex>

@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom/client'
 
 // libs
 import { Card, Flex, Image, Tag } from 'antd'
+import { format, parseISO } from 'date-fns'
 
 // style
 import './MovieCard.css'
@@ -58,7 +59,7 @@ export default class MovieCard extends React.Component {
                 className={'movieCard'}
             >
                 <Image
-                    maskClassName={'movieCard__posterMask'}
+                    // maskClassName={'movieCard__posterMask'}
                     rootClassName={'movieCard__poster'}
                     src={this.props.poster}
                     fallback={'https://www.yilmaztraktor.com/ortak/public/img/not-found.jpg'}
@@ -77,10 +78,10 @@ export default class MovieCard extends React.Component {
                     actions={['action']}
                     bordered={false}
                 >
+                    <span className={'movieCard__time'}>{this.props.date?format(parseISO(this.props.date),'MMMM d, yyyy'):null}</span>
+                    <span className={'movieCard__time'}>{this.props.date}</span>
                     <TagsList tagsData={['tag_1','tag_2']}/>
-                    <p
-                        className={'movieCard__description'}
-                    >
+                    <p className={'movieCard__description'}>
                         {this.mutateDescription(this.props.description)}
                     </p>
                 </Card>

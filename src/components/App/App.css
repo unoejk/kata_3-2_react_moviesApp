@@ -10,12 +10,21 @@
     max-width: 1010px;
 }
 .mpContentList__header,.mpContentList__footer{
-    background-color: #313336;
-    height: 80px;
+    /*background-color: #313336;*/
+    /*height: 80px;*/
     flex-shrink: 0;
+    flex-wrap: wrap;
 }
-.mpContentList__header{}
+.mpContentList__header{
+    padding: 20px 40px 10px 40px;
+}
 .mpContentList__main{
     flex-grow: 1;
+    padding: 0 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
 }
-.mpContentList__footer{}
+.mpContentList__footer{
+    padding: 30px 40px 30px 40px;
+}

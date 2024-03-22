@@ -3,10 +3,10 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 
 // libs
-// import {takeMeName} from 'takeMeName'
+import {Mentions} from 'antd'
 
 // style
-// import './takeMeName.css'
+import './SearchPanel.css'
 
 // store
 // import {takeMeName} from '../../stores/takeMeName'
@@ -39,15 +39,17 @@ export default class SearchPanel extends React.Component {
     //     })
     // }
 
+    onChange(){
+        console.log('onChange')
+    }
+
     render() {
         return (
-            <div
-                style={{
-                    backgroundColor:'tomato',
-                    width:'40px',
-                    height:'40px',
-                }}
-            ></div>
+            <Mentions
+                className={'searchPanel'}
+                onChange={this.onChange}
+                placeholder={'Type to search...'}
+            />
         )
     }
 }

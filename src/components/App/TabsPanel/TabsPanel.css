@@ -1,0 +1,9 @@
+
+/*fix chrome bag*/
+.ant-tabs-nav-more{
+    visibility: hidden;
+}
+.ant-tabs-nav-operations{
+    position: absolute;
+    visibility: hidden;
+}

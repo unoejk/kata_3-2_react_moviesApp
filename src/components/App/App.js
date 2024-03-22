@@ -16,7 +16,7 @@ import {getMoviesData} from '../../stores/fetch'
 import TabsPanel from './TabsPanel/TabsPanel'
 import SearchPanel from './SearchPanel/SearchPanel'
 import MoviesList from './MoviesList/MoviesList'
-import PagesPanel from './PagesPanel/PagesPanel'
+import PaginationPanel from './PaginationPanel/PaginationPanel'
 
 
 // ---- go-go
@@ -81,7 +81,7 @@ export default class Card extends React.Component {
                         justify={'center'}
                         align={'center'}
                     >
-                        <PagesPanel/>
+                        <PaginationPanel/>
                     </Flex>
                 </Flex>
             </Flex>

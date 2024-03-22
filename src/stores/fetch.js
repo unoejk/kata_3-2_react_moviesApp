@@ -45,6 +45,7 @@ const getMoviesData=async ()=>{
     let res=await fetch(home+'/search/movie?query=test&page=1&sort_by=popularity.desc&'+key)
     res=await res.json()
     res=res.results
+    // console.log(res[0])
     res=res.map(val=>{
         return {
             id:val.id,
@@ -52,6 +53,7 @@ const getMoviesData=async ()=>{
             poster:imgHome+val.poster_path,
             description:val.overview,
             rating:val.vote_averag,
+            date:val.release_date,
         }
     })
     return res
