@@ -4,7 +4,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 
 // libs
-import { Flex } from 'antd'
+import { Flex, Spin } from 'antd'
 
 // style
 import './MoviesList.css'
@@ -19,6 +19,22 @@ import MovieCard from './MovieCard/MovieCard'
 // ---- go-go
 
 const MoviesList=(props)=>{
+
+    // render если ошибка
+    if (props.isError)
+        return(
+            <h1 className={'errorMessage'}>Error: {props.isError}</h1>
+        )
+
+    // render если загрузка
+    if (props.isLoading)
+        return(
+            <Flex className={'spin'}>
+                <Spin size="large"/>
+            </Flex>
+        )
+
+    // render если всё ок
     const moviesElems=props.moviesData.map(val=>{
         // const {id,...valWithoutId}=val
         return (
@@ -28,7 +44,7 @@ const MoviesList=(props)=>{
             />
         )
     })
-    return(
+    return (
         <Flex
             component={'ul'}
             className={'moviesList'}

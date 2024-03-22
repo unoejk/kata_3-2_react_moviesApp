@@ -40,6 +40,8 @@ export default class MovieCard extends React.Component {
     //     })
     // }
 
+    // сокращает описание до максимального количества символов
+    // обрезка после пробелов с округлением вниз
     mutateDescription=(desc='There is no description',length=50)=>{
         if (desc.length<length+1)
             return desc
@@ -55,11 +57,12 @@ export default class MovieCard extends React.Component {
     render() {
         return (
             <Flex
+                // Целая карточка
                 component={'li'}
                 className={'movieCard'}
             >
                 <Image
-                    // maskClassName={'movieCard__posterMask'}
+                    // Постер
                     rootClassName={'movieCard__poster'}
                     src={this.props.poster}
                     fallback={'https://www.yilmaztraktor.com/ortak/public/img/not-found.jpg'}
@@ -72,6 +75,7 @@ export default class MovieCard extends React.Component {
                     }}
                 ></Image>
                 <Card
+                    // Сраная карточка
                     className={'movieCard__article'}
                     title={this.props.title}
                     extra={'extra'}
@@ -79,7 +83,6 @@ export default class MovieCard extends React.Component {
                     bordered={false}
                 >
                     <span className={'movieCard__time'}>{this.props.date?format(parseISO(this.props.date),'MMMM d, yyyy'):null}</span>
-                    <span className={'movieCard__time'}>{this.props.date}</span>
                     <TagsList tagsData={['tag_1','tag_2']}/>
                     <p className={'movieCard__description'}>
                         {this.mutateDescription(this.props.description)}

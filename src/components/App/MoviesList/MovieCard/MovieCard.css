@@ -1,4 +1,9 @@
 
+/*title fix*/
+.ant-card .ant-card-head-title{
+    white-space: normal;
+}
+
 /*removeLines*/
 .ant-card{
     border-radius: 0;

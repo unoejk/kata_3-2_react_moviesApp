@@ -9,10 +9,22 @@ import {Mentions} from 'antd'
 import './SearchPanel.css'
 
 // store
-// import {takeMeName} from '../../stores/takeMeName'
+import {debounce} from '../../../stores/other'
 
 // components
 // import takeMeName from '../takeMeName/takeMeName'
+
+// function debounce(fn,debounceTime){
+//     return function(e){
+//         this.counter=this.counter===undefined?1:this.counter+1
+//         setTimeout(()=>{
+//             this.counter--
+//             if (!this.counter){
+//                 fn.apply(this,arguments)
+//             }
+//         },debounceTime)
+//     }
+// }
 
 
 // ---- go-go
@@ -30,7 +42,7 @@ export default class SearchPanel extends React.Component {
     // }
 
     // state={
-    //     takeMeName:'takeMeName',
+    //     query:'',
     // }
 
     // takeMeName=(takeMeName)=>{
@@ -39,8 +51,10 @@ export default class SearchPanel extends React.Component {
     //     })
     // }
 
-    onChange(){
-        console.log('onChange')
+    // apply чтобы запрос моментально не отправлялся
+    debounceUpdateMoviesData=debounce(this.props.changeRequest,500)
+    onChange=(e)=>{
+        this.debounceUpdateMoviesData(e.trim())
     }
 
     render() {
@@ -49,6 +63,7 @@ export default class SearchPanel extends React.Component {
                 className={'searchPanel'}
                 onChange={this.onChange}
                 placeholder={'Type to search...'}
+                autoFocus
             />
         )
     }

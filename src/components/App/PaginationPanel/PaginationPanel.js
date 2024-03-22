@@ -30,7 +30,8 @@ export default class PagesPanel extends React.Component {
     // }
 
     // state={
-    //     takeMeName:'takeMeName',
+    //     totalResults:this.props.totalResults,
+    //     activePage:this.props.activePage,
     // }
 
     // takeMeName=(takeMeName)=>{
@@ -39,12 +40,18 @@ export default class PagesPanel extends React.Component {
     //     })
     // }
 
+    onChange=(e)=>{
+        this.props.changePage(e)
+    }
+
     render() {
         return (
             <Pagination
-                defaultCurrent={1}
-                defaultPageSize={5}
-                total={20}
+                current={this.props.activePage}
+                pageSize={20}                       // элементов на странице    (количество страниц = total/pageSize)
+                total={this.props.totalResults}     // всего элементов          (количество страниц = total/pageSize)
+                onChange={this.onChange}
+                showSizeChanger={false}
             />
         )
     }

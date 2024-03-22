@@ -41,22 +41,40 @@ const token='eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5OWQwOTdhNTMzMmNjY2EwNDZhYjJlMWJhMj
 // ?? searchMoviesList: https://developer.themoviedb.org/reference/search-movie
 // home+'/search/movie?query=test&page=1&sort_by=popularity.desc&'+key
 
-const getMoviesData=async ()=>{
-    let res=await fetch(home+'/search/movie?query=test&page=1&sort_by=popularity.desc&'+key)
+const getNewMoviesData=async (query='',page=1)=>{
+    // console.log(query, page)
+    // console.log(query)
+    // console.log(page)
+    let res
+    if (query===''){
+        // res=await fetch(home+'/discover/movie?page='+99999999+'&sort_by=popularity.desc&'+key)
+        res=await fetch(home+'/discover/movie?page='+page+'&sort_by=popularity.desc&'+key)
+            // .catch((e)=>{
+            //     throw e
+            // })
+    }else {
+        res=await fetch(home+'/search/movie?query='+query+'&page='+page+'&sort_by=popularity.desc&'+key)
+    }
+    console.log(res)
     res=await res.json()
-    res=res.results
-    // console.log(res[0])
-    res=res.map(val=>{
-        return {
-            id:val.id,
-            title:val.original_title,
-            poster:imgHome+val.poster_path,
-            description:val.overview,
-            rating:val.vote_averag,
-            date:val.release_date,
-        }
-    })
-    return res
+    // console.log(res)
+    // console.log(res.results[0])
+    return {
+        moviesData:res.results.map(val=>{
+            return {
+                id:val.id,
+                title:val.original_title,
+                poster:imgHome+val.poster_path,
+                description:val.overview,
+                rating:val.vote_averag,
+                date:val.release_date,
+            }
+        }),
+        activePage:res.page,
+        totalResults:res.total_pages>500
+            ?500*20
+            :res.total_results,
+    }
 }
 
-export {getMoviesData}
+export {getNewMoviesData}
