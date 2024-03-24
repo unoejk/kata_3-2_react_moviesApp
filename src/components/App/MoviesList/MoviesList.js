@@ -4,7 +4,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 
 // libs
-import { Flex, Spin } from 'antd'
+import { Flex, Spin, Alert } from 'antd'
 
 // style
 import './MoviesList.css'
@@ -23,7 +23,10 @@ const MoviesList=(props)=>{
     // render если ошибка
     if (props.isError)
         return(
-            <h1 className={'errorMessage'}>Error: {props.isError}</h1>
+            <Alert
+                message={'Error: '+props.isError}
+                type={'error'}
+            />
         )
 
     // render если загрузка
@@ -32,6 +35,15 @@ const MoviesList=(props)=>{
             <Flex className={'spin'}>
                 <Spin size="large"/>
             </Flex>
+        )
+
+    // render если пусто
+    if (props.moviesData[0]===undefined)
+        return(
+            <Alert
+                message={'Nothing found'}
+                type={'info'}
+            />
         )
 
     // render если всё ок

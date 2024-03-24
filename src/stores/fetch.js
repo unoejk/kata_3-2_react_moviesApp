@@ -49,13 +49,10 @@ const getNewMoviesData=async (query='',page=1)=>{
     if (query===''){
         // res=await fetch(home+'/discover/movie?page='+99999999+'&sort_by=popularity.desc&'+key)
         res=await fetch(home+'/discover/movie?page='+page+'&sort_by=popularity.desc&'+key)
-            // .catch((e)=>{
-            //     throw e
-            // })
     }else {
         res=await fetch(home+'/search/movie?query='+query+'&page='+page+'&sort_by=popularity.desc&'+key)
     }
-    console.log(res)
+    // console.log(res)
     res=await res.json()
     // console.log(res)
     // console.log(res.results[0])

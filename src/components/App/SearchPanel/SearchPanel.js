@@ -9,7 +9,8 @@ import {Mentions} from 'antd'
 import './SearchPanel.css'
 
 // store
-import {debounce} from '../../../stores/other'
+// import {debounce} from '../../../stores/other'
+import _ from 'lodash'
 
 // components
 // import takeMeName from '../takeMeName/takeMeName'
@@ -52,7 +53,8 @@ export default class SearchPanel extends React.Component {
     // }
 
     // apply чтобы запрос моментально не отправлялся
-    debounceUpdateMoviesData=debounce(this.props.changeRequest,500)
+    debounceUpdateMoviesData=_.debounce(this.props.changeRequest,500)
+    // debounceUpdateMoviesData=debounce(this.props.changeRequest,500)
     onChange=(e)=>{
         this.debounceUpdateMoviesData(e.trim())
     }

@@ -38,14 +38,12 @@ export default class Card extends React.Component {
         isLoading:false,
     }
 
-    // Капотная функция функция: запускается после монтирования
-    // делает первую загрузку фильмов
     async componentDidMount(){
         await this.updateMoviesData('',1)
     }
 
     // Закачка фильмов с проверкой на ошибки
-    // проверка на ошибки поле влияет на отображение MoviesList
+    // проверка на ошибки после влияет на отображение MoviesList
     updateMoviesData=async (query,page)=>{
 
         // разрыв сети
