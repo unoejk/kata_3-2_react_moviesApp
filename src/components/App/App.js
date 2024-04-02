@@ -1,17 +1,13 @@
-
 // react
 import React from 'react'
-import ReactDOM from 'react-dom/client'
-
 // libs
-import { Flex, Spin } from 'antd'
+import { Flex } from 'antd'
 
 // style
 import './App.css'
-
 // store
-import {getNewMoviesData} from '../../stores/fetch'
-import {debounce} from '../../stores/other'
+import { getNewMoviesData, getGenres, updateGuestSession, setMovieRate, getRatedMoviesData } from '../../stores/fetch'
+import { GenresProvider } from '../../stores/context'
 
 // components
 import TabsPanel from './TabsPanel/TabsPanel'
@@ -19,146 +15,208 @@ import SearchPanel from './SearchPanel/SearchPanel'
 import MoviesList from './MoviesList/MoviesList'
 import PaginationPanel from './PaginationPanel/PaginationPanel'
 
-// ---- go-go
-
-// console.log(getMoviesData())
-// const funcName=async ()=>{
-//     const data=await getMoviesData()
-//     console.log(data[0])
-// }
-// funcName()
+// ---------------- go-go
 
 export default class Card extends React.Component {
-    state={
-        moviesData:[],      // массив с фильмами
-        activeQuery:'',     // текущий поиск
-        activePage:1,       // текущая страница
-        totalResults:0,     // всего результатов, чтобы было правильное количество страниц
-        isError:false,
-        isLoading:false,
+  state = {
+    isRatedTabActive: false,
+
+    allActiveQuery: '',
+    allMoviesData: [],
+    allActivePage: 1,
+    allTotalResults: 0, // всего результатов, чтобы считать правильное количество страниц
+    isAllError: false,
+    isAllLoading: false,
+
+    ratedMoviesData: [],
+    ratedActivePage: 1,
+    ratedTotalResults: 0, // всего результатов, чтобы считать правильное количество страниц
+    // isRatedError:false,
+    isRatedLoading: false,
+
+    genresData: [],
+    // isGenresError:false,
+  }
+
+  async componentDidMount() {
+    // разрыв сети
+    if (!navigator.onLine) {
+      await this.setState({
+        isAllError: 'Disconnected',
+        isRatedError: 'Disconnected',
+      })
+      return
     }
 
-    async componentDidMount(){
-        await this.updateMoviesData('',1)
+    updateGuestSession()
+
+    this.updateGenresData()
+
+    this.updateMoviesData('', 1).catch(() => {
+      this.setState({
+        // ошибку выдать, загрузку убрать
+        isAllError: 'Some error, its our problem',
+        isAllLoading: false,
+      })
+    })
+
+    this.updateRatedMoviesData().catch(() => {
+      this.setState({
+        // ошибку выдать, загрузку убрать
+        isRatedError: 'Some error, its our problem',
+        isRatedLoading: false,
+      })
+    })
+  }
+
+  // список всех фильмов
+  updateMoviesData = async (query, page) => {
+    this.setState({
+      // флаг загрузки
+      isAllLoading: true,
+    })
+    const newData = await getNewMoviesData(query, page)
+    // console.log(newData.moviesData[0])
+    this.setState({
+      // обновления для компонентов
+      allActiveQuery: query, // текущий поиск
+      allMoviesData: newData.moviesData, // массив с фильмами
+      allTotalResults: newData.totalResults, // всего результатов, чтобы было правильное количество страниц
+      allActivePage: newData.activePage, // текущая страница
+      // сброс загрузки и ошибки
+      isAllError: false,
+      isAllLoading: false,
+    })
+  }
+
+  // список тегов
+  updateGenresData = async () => {
+    const genresData = await getGenres()
+    this.setState({
+      genresData: genresData,
+    })
+  }
+  // список отмеченных фильмов
+  updateRatedMoviesData = async (page) => {
+    this.setState({
+      // флаг загрузки
+      isRatedLoading: true,
+    })
+    const newData = await getRatedMoviesData(page)
+    // console.log(newData)
+    this.setState({
+      // обновления для компонентов
+      ratedMoviesData: newData.moviesData, // массив с фильмами
+      ratedTotalResults: newData.totalResults, // всего результатов, чтобы было правильное количество страниц
+      ratedActivePage: newData.activePage, // текущая страница
+      // сброс загрузки и ошибки
+      // isRatedError:false,
+      isRatedLoading: false,
+    })
+  }
+
+  // ---------------- forTabsPanel
+  changeTab = (tabName) => {
+    if (tabName === 'search') {
+      this.setState({
+        isRatedTabActive: false,
+      })
     }
-
-    // Закачка фильмов с проверкой на ошибки
-    // проверка на ошибки после влияет на отображение MoviesList
-    updateMoviesData=async (query,page)=>{
-
-        // разрыв сети
-        if (!navigator.onLine) {
-            this.setState({
-                isError:'u was disconnected',
-            })
-            return
-        }
-
-        try {
-            this.setState({
-                // флаг загрузки
-                isLoading:true,
-            })
-            const newData=await getNewMoviesData(query,page)
-            this.setState({
-                // обновления для компонентов
-                activeQuery:query,                  // текущий поиск
-                moviesData:newData.moviesData,      // массив с фильмами
-                totalResults:newData.totalResults,  // всего результатов, чтобы было правильное количество страниц
-                activePage:newData.activePage,      // текущая страница
-                // сброс загрузки и ошибки
-                isError:false,
-                isLoading:false,
-            })
-        }catch (e){
-            this.setState({
-                // ошибку выдать, загрузку убрать
-                isError:'Some error, its our problem',
-                isLoading:false,
-            })
-        }
+    if (tabName === 'rated') {
+      this.setState({
+        isRatedTabActive: true,
+      })
     }
+  }
 
-    // ---------------- forTabsPanel
+  // ---------------- forSearchPanel
 
-    // ---------------- forSearchPanel
+  // Новый input: поиск из SearchPanel, страницу на 1
+  changeRequest = async (newRequest) => {
+    await this.updateMoviesData(newRequest, 1)
+  }
 
-    // Новый input: поиск из SearchPanel, страницу на 1
-    changeRequest=async (newRequest)=>{
-        await this.updateMoviesData(newRequest,1)
-    }
+  // ---------------- forMoviesList
 
-    // ---------------- forMoviesList
+  setMovieRate = async (id, e) => {
+    await setMovieRate(id, e)
+    this.updateRatedMoviesData().catch(() => {
+      this.setState({
+        // ошибку выдать, загрузку убрать
+        isRatedError: 'Some error, its our problem',
+        isRatedLoading: false,
+      })
+    })
+  }
 
-    // ---------------- forPaginationPanel
+  // ---------------- forPaginationPanel
 
-    // Новая страница: поиск из текущего, страница из PaginationPanel
-    changePage=async (newPage)=>{
-        await this.updateMoviesData(this.state.activeQuery,newPage)
-    }
+  // Новая страница: поиск из текущего, страница из PaginationPanel
+  changePage = async (newPage) => {
+    await this.updateMoviesData(this.state.allActiveQuery, newPage)
+  }
 
-    render() {
-        return (
-            <Flex
-                className={'mpWrap'}
-                justify={'center'}
-            >
-                <Flex
-                    className={'mpContentList'}
-                    vertical={true}
-                    justify={'space-between'}
-                >
-                    <Flex
-                        component={'header'}
-                        className={'mpContentList__header'}
-                        justify={'center'}
-                        align={'center'}
-                    >
+  render() {
+    // setTimeout(()=>{
+    //     console.log(this.props.ratedMoviesData)
+    // },1000)
 
-                        {/*********--------*/}
-                        <TabsPanel/>
-                        {/*--------*********/}
+    const isMobile =
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(
+        navigator.userAgent
+      )
 
-                    </Flex>
-                    <Flex
-                        component={'main'}
-                        className={'mpContentList__main'}
-                        vertical={true}
-                        align={'center'}
-                    >
-                        {/*********--------*/}
-                        <SearchPanel
-                            changeRequest={this.changeRequest}  // хук для нового поиска
-                        />
-                        {/*--------*********/}
+    return (
+      <Flex className={isMobile ? 'mpWrap mobile' : 'mpWrap'} justify={'center'}>
+        <Flex className={'mpContentList'} vertical={true} justify={'space-between'}>
+          <Flex component={'header'} className={'mpContentList__header'} justify={'center'} align={'center'}>
+            {/*********--------*/}
+            <TabsPanel changeTab={this.changeTab} />
+            {/*--------*********/}
+          </Flex>
+          <Flex component={'main'} className={'mpContentList__main'} vertical={true} align={'center'}>
+            {/*********--------*/}
+            {this.state.isRatedTabActive ? null : <SearchPanel changeRequest={this.changeRequest} />}
+            {/*--------*********/}
 
-                        {/*********--------*/}
-                        <MoviesList
-                            moviesData={this.state.moviesData}  // массив с фильмами
-                            isError={this.state.isError}        // флаг чтобы компонент показывал ошибку
-                            isLoading={this.state.isLoading}    // флаг чтобы компонент показывал загрузку
-                        />
-                        {/*--------*********/}
-
-                    </Flex>
-                    <Flex
-                        component={'footer'}
-                        className={'mpContentList__footer'}
-                        justify={'center'}
-                        align={'center'}
-                    >
-
-                        {/*********--------*/}
-                        <PaginationPanel
-                            changePage={this.changePage}            // хук для новой страницы
-                            totalResults={this.state.totalResults}  // всего результатов, чтобы было правильное количество страниц
-                            activePage={this.state.activePage}      // текущая страница
-                        />
-                        {/*--------*********/}
-
-                    </Flex>
-                </Flex>
-            </Flex>
-        )
-    }
+            {/*********--------*/}
+            <GenresProvider value={this.state.genresData}>
+              <MoviesList
+                moviesData={
+                  this.state.isRatedTabActive // массив с фильмами
+                    ? this.state.ratedMoviesData
+                    : this.state.allMoviesData
+                }
+                isError={this.state.isAllError} // флаг чтобы компонент показывал ошибку
+                isLoading={
+                  this.state.isRatedTabActive // флаг чтобы компонент показывал загрузку
+                    ? this.state.isRatedLoading
+                    : this.state.isAllLoading
+                }
+                setMovieRate={this.setMovieRate}
+              />
+            </GenresProvider>
+            {/*--------*********/}
+          </Flex>
+          <Flex component={'footer'} className={'mpContentList__footer'} justify={'center'} align={'center'}>
+            {/*********--------*/}
+            <PaginationPanel
+              changePage={this.changePage} // хук для новой страницы
+              totalResults={
+                this.state.isRatedTabActive // всего результатов, чтобы было правильное количество страниц
+                  ? this.state.ratedTotalResults
+                  : this.state.allTotalResults
+              }
+              activePage={
+                this.state.isRatedTabActive // текущая страница
+                  ? this.state.ratedActivePage
+                  : this.state.allActivePage
+              }
+            />
+            {/*--------*********/}
+          </Flex>
+        </Flex>
+      </Flex>
+    )
+  }
 }

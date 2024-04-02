@@ -9,6 +9,9 @@
     width: 100%;
     max-width: 1010px;
 }
+.mobile .mpContentList{
+    max-width: initial;
+}
 .mpContentList__header,.mpContentList__footer{
     /*background-color: #313336;*/
     /*height: 80px;*/
@@ -18,12 +21,19 @@
 .mpContentList__header{
     padding: 20px 40px 10px 40px;
 }
+.mobile .mpContentList__header{
+    padding: 10px 40px 5px 40px;
+}
 .mpContentList__main{
     flex-grow: 1;
     padding: 0 40px;
     display: flex;
     flex-direction: column;
     gap: 30px;
+}
+.mobile .mpContentList__main{
+    padding: 0 20px;
+    gap: 15px;
 }
 .mpContentList__footer{
     padding: 30px 40px 30px 40px;

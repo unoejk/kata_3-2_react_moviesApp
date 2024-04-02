@@ -1,15 +1,10 @@
 // react
 import React from 'react'
-import ReactDOM from 'react-dom/client'
-
 // libs
-import {Mentions} from 'antd'
-
+import { Mentions } from 'antd'
 // style
 import './SearchPanel.css'
-
 // store
-// import {debounce} from '../../../stores/other'
 import _ from 'lodash'
 
 // components
@@ -27,46 +22,26 @@ import _ from 'lodash'
 //     }
 // }
 
-
-// ---- go-go
+// ---------------- go-go
 
 export default class SearchPanel extends React.Component {
-    // static defaultProps={
-    //     takeMeName:'',
-    // }
-    // static propTypes={
-    //     takeMeName:(props, propName, componentName)=>{
-    //         if (typeof props[propName]==='string')
-    //             return null
-    //         return new TypeError(`${componentName}: ${propName} must be string`)
-    //     },
-    // }
+  static defaultProps = {
+    changeRequest: () => {},
+  }
+  static propTypes = {
+    changeRequest: (props, propName, componentName) => {
+      if (typeof props[propName] === 'function') return null
+      return new TypeError(`${componentName}: ${propName} must be function`)
+    },
+  }
 
-    // state={
-    //     query:'',
-    // }
+  debounceUpdateMoviesData = _.debounce(this.props.changeRequest, 500)
+  // debounceUpdateMoviesData=debounce(this.props.changeRequest,500)
+  onChange = (e) => {
+    this.debounceUpdateMoviesData(e.trim())
+  }
 
-    // takeMeName=(takeMeName)=>{
-    //     this.setState({
-    //         takeMeName:takeMeName,
-    //     })
-    // }
-
-    // apply чтобы запрос моментально не отправлялся
-    debounceUpdateMoviesData=_.debounce(this.props.changeRequest,500)
-    // debounceUpdateMoviesData=debounce(this.props.changeRequest,500)
-    onChange=(e)=>{
-        this.debounceUpdateMoviesData(e.trim())
-    }
-
-    render() {
-        return (
-            <Mentions
-                className={'searchPanel'}
-                onChange={this.onChange}
-                placeholder={'Type to search...'}
-                autoFocus
-            />
-        )
-    }
+  render() {
+    return <Mentions className={'searchPanel'} onChange={this.onChange} placeholder={'Type to search...'} autoFocus />
+  }
 }

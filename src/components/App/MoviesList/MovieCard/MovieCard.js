@@ -1,94 +1,180 @@
 // react
 import React from 'react'
-import ReactDOM from 'react-dom/client'
-
 // libs
-import { Card, Flex, Image, Tag } from 'antd'
+import { Flex, Image, Rate } from 'antd'
 import { format, parseISO } from 'date-fns'
 
 // style
 import './MovieCard.css'
-
-// store
-// import {takeMeName} from '../../stores/takeMeName'
-
 // components
-import TagsList from './TagsList/TagsList'
+import GenresList from './GenresList/GenresList'
 
-
-// ---- go-go
+// ---------------- go-go
 
 export default class MovieCard extends React.Component {
-    // static defaultProps={
-    //     takeMeName:'',
-    // }
-    // static propTypes={
-    //     takeMeName:(props, propName, componentName)=>{
-    //         if (typeof props[propName]==='string')
-    //             return null
-    //         return new TypeError(`${componentName}: ${propName} must be string`)
-    //     },
-    // }
+  static defaultProps = {
+    date: '',
+    description: '',
+    genreIds: [],
+    id: 0,
+    myRate: null,
+    poster: '',
+    rating: 0,
+    setMovieRate: () => {},
+    title: '',
+  }
+  static propTypes = {
+    date: (props, propName, componentName) => {
+      if (typeof props[propName] === 'string') return null
+      return new TypeError(`${componentName}: ${propName} must be string`)
+    },
+    description: (props, propName, componentName) => {
+      if (typeof props[propName] === 'string') return null
+      return new TypeError(`${componentName}: ${propName} must be string`)
+    },
+    genreIds: (props, propName, componentName) => {
+      if (!Array.isArray(propName)) return null
+      return new TypeError(`${componentName}: ${propName} must be array`)
+    },
+    id: (props, propName, componentName) => {
+      if (typeof props[propName] === 'number') return null
+      return new TypeError(`${componentName}: ${propName} must be number`)
+    },
+    myRate: (props, propName, componentName) => {
+      if (typeof props[propName] === 'number' || props[propName] === null) return null
+      return new TypeError(`${componentName}: ${propName} must be number or null`)
+    },
+    poster: (props, propName, componentName) => {
+      if (typeof props[propName] === 'string') return null
+      return new TypeError(`${componentName}: ${propName} must be string`)
+    },
+    rating: (props, propName, componentName) => {
+      if (typeof props[propName] === 'number') return null
+      return new TypeError(`${componentName}: ${propName} must be number`)
+    },
+    setMovieRate: (props, propName, componentName) => {
+      if (typeof props[propName] === 'function') return null
+      return new TypeError(`${componentName}: ${propName} must be function`)
+    },
+    title: (props, propName, componentName) => {
+      if (typeof props[propName] === 'string') return null
+      return new TypeError(`${componentName}: ${propName} must be string`)
+    },
+  }
 
-    // state={
-    //     takeMeName:'takeMeName',
-    // }
+  state = {
+    rate: 0,
+  }
 
-    // takeMeName=(takeMeName)=>{
-    //     this.setState({
-    //         takeMeName:takeMeName,
-    //     })
-    // }
-
-    // сокращает описание до максимального количества символов
-    // обрезка после пробелов с округлением вниз
-    mutateDescription=(desc='There is no description',length=50)=>{
-        if (desc.length<length+1)
-            return desc
-        let counter=length
-        while (desc[counter]!==' '){
-            if (counter===0)
-                return desc.slice(0,length+1)
-            counter--
-        }
-        return desc.slice(0,counter+1)+'...'
+  async componentDidMount() {
+    if (this.props.myRate !== null) {
+      this.setState({
+        rate: this.props.myRate,
+      })
     }
+  }
 
-    render() {
-        return (
-            <Flex
-                // Целая карточка
-                component={'li'}
-                className={'movieCard'}
-            >
-                <Image
-                    // Постер
-                    rootClassName={'movieCard__poster'}
-                    src={this.props.poster}
-                    fallback={'https://www.yilmaztraktor.com/ortak/public/img/not-found.jpg'}
-                    alt={'poster'}
-                    style={{
-                        objectFit:'cover',
-                        width:'180px',
-                        height:'100%',
-                        flexShrink:'0',
-                    }}
-                ></Image>
-                <Card
-                    // Сраная карточка
-                    className={'movieCard__article'}
-                    title={this.props.title}
-                    extra={'extra'}
-                    actions={['action']}
-                    bordered={false}
-                >
-                    <span className={'movieCard__time'}>{this.props.date?format(parseISO(this.props.date),'MMMM d, yyyy'):null}</span>
-                    <TagsList tagsData={['tag_1','tag_2']}/>
-                    <p className={'movieCard__description'}>
-                        {this.mutateDescription(this.props.description)}
-                    </p>
-                </Card>
-            </Flex>
-        )
+  // сокращает описание до максимального количества символов
+  // обрезка после пробелов с округлением вниз
+  mutateDescription = (desc = 'There is no description', length = 100) => {
+    if (desc.length < length + 1) return desc
+    let counter = length
+    while (desc[counter] !== ' ') {
+      if (counter === 0) return desc.slice(0, length + 1)
+      counter--
     }
+    return desc.slice(0, counter + 1) + '...'
+  }
+
+  // рейтинг
+  getRatingStyle = () => {
+    let res = 'movieCard__rating'
+    const rating = this.props.rating.toFixed(1)
+    if (rating <= 3) return (res += ' movieCard__rating--zero')
+    if (rating > 3 && rating <= 5) return (res += ' movieCard__rating--three')
+    if (rating > 5 && rating <= 7) return (res += ' movieCard__rating--five')
+    if (rating > 7) return (res += ' movieCard__rating--seven')
+    return res
+  }
+  onChangeRate = (e) => {
+    this.setState({
+      rate: e,
+    })
+    this.props.setMovieRate(this.props.id, e)
+  }
+
+  render() {
+    return (
+      <Flex
+        // Целая карточка
+        component={'li'}
+        className={'movieCard'}
+      >
+        <Image
+          // Постер
+          rootClassName={'movieCard__poster movieCard__posterDesktop'}
+          src={this.props.poster}
+          fallback={'https://www.yilmaztraktor.com/ortak/public/img/not-found.jpg'}
+          alt={'poster'}
+        ></Image>
+        <div className={'movieCard__article'}>
+          <div className={'movieCard__topBlock'}>
+            <Image
+              // Постер
+              rootClassName={'movieCard__poster movieCard__posterMobile'}
+              src={this.props.poster}
+              fallback={'https://www.yilmaztraktor.com/ortak/public/img/not-found.jpg'}
+              alt={'poster'}
+            ></Image>
+            <div className={'movieCard__topContent'}>
+              <div className={'movieCard__header'}>
+                <h2 className={'movieCard__name'}>{this.props.title}</h2>
+                <div className={this.getRatingStyle()}>{this.props.rating.toFixed(1)}</div>
+              </div>
+              <span className={'movieCard__time'}>
+                {this.props.date ? format(parseISO(this.props.date), 'MMMM d, yyyy') : null}
+              </span>
+              <div className={'movieCard__genres'}>
+                <GenresList genreIds={this.props.genreIds} />
+              </div>
+            </div>
+          </div>
+          <p className={'movieCard__description'}>{this.mutateDescription(this.props.description)}</p>
+          <div className={'movieCard__rate'}>
+            <Rate count={10} allowHalf value={this.state.rate} onChange={this.onChangeRate} />
+          </div>
+        </div>
+        {/*<Card*/}
+        {/*    // antd карточка*/}
+        {/*    className={'movieCard__article'}*/}
+        {/*    title={this.props.title}*/}
+        {/*    extra={*/}
+        {/*        <Flex*/}
+        {/*            className={this.getRatingStyle()}*/}
+        {/*            justify={'center'}*/}
+        {/*            align={'center'}*/}
+        {/*        >*/}
+        {/*            {this.props.rating.toFixed(1)}*/}
+        {/*        </Flex>*/}
+        {/*    }*/}
+        {/*    actions={[*/}
+        {/*        <Rate*/}
+        {/*            count={10}*/}
+        {/*            allowHalf*/}
+        {/*            value={this.state.rate}*/}
+        {/*            onChange={this.onChangeRate}*/}
+        {/*        />*/}
+        {/*    ]}*/}
+        {/*    bordered={false}*/}
+        {/*>*/}
+        {/*    <span*/}
+        {/*        className={'movieCard__time'}>{this.props.date ? format(parseISO(this.props.date), 'MMMM d, yyyy') : null}</span>*/}
+        {/*    <GenresList genreIds={this.props.genreIds} />*/}
+        {/*    <p className={'movieCard__description'}>*/}
+        {/*        {this.mutateDescription(this.props.description)}*/}
+        {/*    </p>*/}
+        {/*</Card>*/}
+      </Flex>
+    )
+  }
 }
