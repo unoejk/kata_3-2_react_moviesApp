@@ -1,113 +1,4 @@
 
-/*!*title fix*!*/
-/*.ant-card .ant-card-head-title{*/
-/*    white-space: normal;*/
-/*}*/
-
-/*!*rate fix*!*/
-/*.ant-card .ant-card-actions .ant-rate .ant-rate-star{*/
-/*    margin-inline-end: 2px;*/
-/*}*/
-/*.ant-card .ant-card-actions .ant-rate .ant-rate-star:last-child{*/
-/*    margin-inline-end: 0;*/
-/*}*/
-
-/*!*removeLines*!*/
-/*.ant-card{*/
-/*    border-radius: 0;*/
-/*}*/
-/*.ant-card .ant-card-head,*/
-/*.ant-card .ant-card-actions{*/
-/*    border: none;*/
-/*}*/
-
-/*!*removeLength*!*/
-/*.ant-card .ant-card-body{*/
-/*    padding-top: 0;*/
-/*}*/
-/*!*.ant-card .ant-card-head,*!*/
-/*!*.ant-card .ant-card-body,*!*/
-/*!*.ant-card .ant-card-actions*!*/
-/*!*{*!*/
-/*!*    padding: 0;*!*/
-/*!*}*!*/
-/*!*.ant-card .ant-card-head{*!*/
-/*!*    min-height: 0;*!*/
-/*!*}*!*/
-/*!*.ant-card .ant-card-actions>li{*!*/
-/*!*    margin: 0;*!*/
-/*!*}*!*/
-
-/*!*setPosition*!*/
-/*.ant-card{*/
-/*    border-radius: 0;*/
-/*    display: flex;*/
-/*    flex-direction: column;*/
-/*    justify-content: space-between;*/
-/*}*/
-/*.ant-card-body{*/
-/*    flex-grow: 1;*/
-/*    display: flex;*/
-/*    flex-direction: column;*/
-/*    gap: 10px;*/
-/*}*/
-/*.ant-card-head,*/
-/*.ant-card-actions{*/
-/*    flex-shrink: 0;*/
-/*}*/
-
-/*!*setLength*!*/
-/*.movieCard{*/
-/*    width: 450px;*/
-/*    height: 280px;*/
-/*    box-shadow: 2px 2px 10px 0 rgba(0, 0, 0, 0.5);*/
-/*}*/
-/*.movieCard__posterMask{*/
-/*    !*overflow: hidden !important;*!*/
-/*}*/
-/*.movieCard__poster{*/
-/*    !*object-fit: cover !important;*!*/
-/*    !*width: 180px !important;*!*/
-/*    !*height: 100% !important;*!*/
-/*    !*flex-shrink: 0 !important;*!*/
-/*}*/
-/*.movieCard__article{*/
-/*    flex-grow: 1;*/
-/*    !*display: flex;*!*/
-/*    !*flex-direction: column;*!*/
-/*    !*gap: 20px;*!*/
-/*}*/
-/*:where(.css-dev-only-do-not-override-djtmh8).ant-card .ant-card-head{*/
-/*    padding-right: 10px;*/
-/*}*/
-/*.movieCard__rating{*/
-/*    !*background-color: tomato;*!*/
-/*    width: 30px;*/
-/*    height: 30px;*/
-/*    border-radius: 50%;*/
-/*    border: 3px solid;*/
-
-/*    color: rgba(0, 0, 0, 0.88);*/
-/*    font-weight: 600;*/
-/*    !*font: inherit;*!*/
-/*}*/
-/*.movieCard__rating--zero{*/
-/*    border-color: #E90000;*/
-/*}*/
-/*.movieCard__rating--three{*/
-/*    border-color: #E97E00;*/
-/*}*/
-/*.movieCard__rating--five{*/
-/*    border-color: #E9D100;*/
-/*}*/
-/*.movieCard__rating--seven{*/
-/*    border-color: #66E900;*/
-/*}*/
-/*.movieCard__time{}*/
-/*.movieCard__description{}*/
-
-/*----------------*/
-
 .movieCard{
     width: 450px;
     height: 280px;
@@ -116,9 +7,6 @@
     font-size: 12px;
     line-height: 22px;
     color: #000000;
-}
-.mobile .movieCard{
-    width: 100%;
 }
 
 .movieCard__poster{
@@ -135,12 +23,6 @@
     width: 60px;
     height: fit-content;
     margin: 10px 0 0 10px;
-}
-.mobile .movieCard__posterDesktop{
-    display: none;
-}
-.mobile .movieCard__posterMobile{
-    display: flex;
 }
 
 .movieCard__article{
@@ -166,9 +48,6 @@
     justify-content: space-between;
     gap: 24px;
     margin: 10px 10px 0 24px;
-}
-.mobile .movieCard__header{
-    margin: 10px 10px 0 10px;
 }
 
 .movieCard__name{
@@ -208,33 +87,18 @@
     margin: 0 24px;
     color: #827E7E;
 }
-.mobile .movieCard__time{
-    margin: 0 10px;
-}
 
 .movieCard__genres{
     margin: 0 24px;
-}
-.mobile .movieCard__genres{
-    margin: 0 10px;
 }
 
 .movieCard__description{
     flex-grow: 1;
     margin: 0 24px;
 }
-.mobile .movieCard__description{
-    margin: 0 10px;
-}
 
 .movieCard__rate{
     margin: 0 24px 10px 24px;
-}
-.mobile .movieCard__rate{
-    margin: 0 10px 10px 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
 }
 
 /*----------------*/
@@ -245,6 +109,39 @@
 }
 .movieCard .ant-rate .ant-rate-star:last-child{
     margin-inline-end: 0;
+}
+
+/*----------------*/
+
+@media (max-width: 575px) {
+    .movieCard{
+        width: 100%;
+        height: 240px;
+    }
+    .movieCard__posterDesktop{
+        display: none;
+    }
+    .movieCard__posterMobile{
+        display: flex;
+    }
+    .movieCard__header{
+        margin: 10px 10px 0 10px;
+    }
+    .movieCard__time{
+        margin: 0 10px;
+    }
+    .movieCard__genres{
+        margin: 0 10px;
+    }
+    .movieCard__description{
+        margin: 0 10px;
+    }
+    .movieCard__rate{
+        margin: 0 10px 10px 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
 }
 
 

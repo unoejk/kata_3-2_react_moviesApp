@@ -11,9 +11,8 @@ import MovieCard from './MovieCard/MovieCard'
 // ---------------- go-go
 
 const MoviesList = (props) => {
-  // render если ошибка
   if (props.isError) return <Alert message={'Error: ' + props.isError} type={'error'} />
-  // render если загрузка
+
   if (props.isLoading)
     return (
       <Flex className={'spin'}>
@@ -21,15 +20,14 @@ const MoviesList = (props) => {
       </Flex>
     )
 
-  // render если пусто
   if (props.moviesData[0] === undefined) return <Alert message={'Nothing found'} type={'info'} />
-  // render если всё ок
+
   const moviesElems = props.moviesData.map((val) => {
-    // const {id,...valWithoutId}=val
     return <MovieCard key={val.id} {...val} setMovieRate={props.setMovieRate} />
   })
+
   return (
-    <Flex component={'ul'} className={'moviesList'} gap={'32px 0'} justify={'space-between'}>
+    <Flex component={'ul'} className={'moviesList'} gap={'30px'} justify={'center'}>
       {moviesElems}
     </Flex>
   )

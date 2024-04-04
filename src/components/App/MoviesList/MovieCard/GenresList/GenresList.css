@@ -1,9 +1,5 @@
 
-.genresList{
-    /*background-color: tomato;*/
-    /*gap: 0;*/
-}
+.genresList{}
 .genresList__item{
-    /*color: tomato;*/
     margin: 0;
 }

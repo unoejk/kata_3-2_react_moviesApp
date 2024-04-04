@@ -36,8 +36,8 @@ export default class PagesPanel extends React.Component {
     return (
       <Pagination
         current={this.props.activePage}
-        pageSize={20} // элементов на странице    (количество страниц = total/pageSize)
-        total={this.props.totalResults} // всего элементов          (количество страниц = total/pageSize)
+        pageSize={20}
+        total={this.props.totalResults}
         onChange={this.onChange}
         showSizeChanger={false}
       />

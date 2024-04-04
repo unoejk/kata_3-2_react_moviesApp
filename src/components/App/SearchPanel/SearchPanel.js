@@ -7,21 +7,6 @@ import './SearchPanel.css'
 // store
 import _ from 'lodash'
 
-// components
-// import takeMeName from '../takeMeName/takeMeName'
-
-// function debounce(fn,debounceTime){
-//     return function(e){
-//         this.counter=this.counter===undefined?1:this.counter+1
-//         setTimeout(()=>{
-//             this.counter--
-//             if (!this.counter){
-//                 fn.apply(this,arguments)
-//             }
-//         },debounceTime)
-//     }
-// }
-
 // ---------------- go-go
 
 export default class SearchPanel extends React.Component {
@@ -36,7 +21,6 @@ export default class SearchPanel extends React.Component {
   }
 
   debounceUpdateMoviesData = _.debounce(this.props.changeRequest, 500)
-  // debounceUpdateMoviesData=debounce(this.props.changeRequest,500)
   onChange = (e) => {
     this.debounceUpdateMoviesData(e.trim())
   }

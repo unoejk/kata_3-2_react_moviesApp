@@ -74,8 +74,6 @@ export default class MovieCard extends React.Component {
     }
   }
 
-  // сокращает описание до максимального количества символов
-  // обрезка после пробелов с округлением вниз
   mutateDescription = (desc = 'There is no description', length = 100) => {
     if (desc.length < length + 1) return desc
     let counter = length
@@ -86,7 +84,6 @@ export default class MovieCard extends React.Component {
     return desc.slice(0, counter + 1) + '...'
   }
 
-  // рейтинг
   getRatingStyle = () => {
     let res = 'movieCard__rating'
     const rating = this.props.rating.toFixed(1)
@@ -96,6 +93,7 @@ export default class MovieCard extends React.Component {
     if (rating > 7) return (res += ' movieCard__rating--seven')
     return res
   }
+
   onChangeRate = (e) => {
     this.setState({
       rate: e,
@@ -105,30 +103,24 @@ export default class MovieCard extends React.Component {
 
   render() {
     return (
-      <Flex
-        // Целая карточка
-        component={'li'}
-        className={'movieCard'}
-      >
+      <Flex component={'li'} className={'movieCard'}>
         <Image
-          // Постер
           rootClassName={'movieCard__poster movieCard__posterDesktop'}
           src={this.props.poster}
           fallback={'https://www.yilmaztraktor.com/ortak/public/img/not-found.jpg'}
-          alt={'poster'}
+          alt={this.props.title}
         ></Image>
         <div className={'movieCard__article'}>
           <div className={'movieCard__topBlock'}>
             <Image
-              // Постер
               rootClassName={'movieCard__poster movieCard__posterMobile'}
               src={this.props.poster}
               fallback={'https://www.yilmaztraktor.com/ortak/public/img/not-found.jpg'}
-              alt={'poster'}
+              alt={this.props.title}
             ></Image>
             <div className={'movieCard__topContent'}>
               <div className={'movieCard__header'}>
-                <h2 className={'movieCard__name'}>{this.props.title}</h2>
+                <h2 className={'movieCard__name'}>{this.mutateDescription(this.props.title, 40)}</h2>
                 <div className={this.getRatingStyle()}>{this.props.rating.toFixed(1)}</div>
               </div>
               <span className={'movieCard__time'}>
@@ -144,36 +136,6 @@ export default class MovieCard extends React.Component {
             <Rate count={10} allowHalf value={this.state.rate} onChange={this.onChangeRate} />
           </div>
         </div>
-        {/*<Card*/}
-        {/*    // antd карточка*/}
-        {/*    className={'movieCard__article'}*/}
-        {/*    title={this.props.title}*/}
-        {/*    extra={*/}
-        {/*        <Flex*/}
-        {/*            className={this.getRatingStyle()}*/}
-        {/*            justify={'center'}*/}
-        {/*            align={'center'}*/}
-        {/*        >*/}
-        {/*            {this.props.rating.toFixed(1)}*/}
-        {/*        </Flex>*/}
-        {/*    }*/}
-        {/*    actions={[*/}
-        {/*        <Rate*/}
-        {/*            count={10}*/}
-        {/*            allowHalf*/}
-        {/*            value={this.state.rate}*/}
-        {/*            onChange={this.onChangeRate}*/}
-        {/*        />*/}
-        {/*    ]}*/}
-        {/*    bordered={false}*/}
-        {/*>*/}
-        {/*    <span*/}
-        {/*        className={'movieCard__time'}>{this.props.date ? format(parseISO(this.props.date), 'MMMM d, yyyy') : null}</span>*/}
-        {/*    <GenresList genreIds={this.props.genreIds} />*/}
-        {/*    <p className={'movieCard__description'}>*/}
-        {/*        {this.mutateDescription(this.props.description)}*/}
-        {/*    </p>*/}
-        {/*</Card>*/}
       </Flex>
     )
   }
